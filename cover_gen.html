@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cover Letter Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@500&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- APP LAYOUT & UI (Screen Only) --- */
+        :root {
+            --ui-bg: #f0f2f5;
+            --ui-sidebar-width: 400px;
+            --ui-sidebar-bg: #ffffff;
+            --ui-border: #e4e6eb;
+            --primary-color: #1a73e8;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--ui-bg);
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* Sidebar Editor */
+        #editor-panel {
+            width: var(--ui-sidebar-width);
+            background: var(--ui-sidebar-bg);
+            border-right: 1px solid var(--ui-border);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            z-index: 10;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.05);
+        }
+
+        .editor-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--ui-border);
+            background: #fff;
+        }
+
+        .editor-header h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .editor-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #5f6368;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input, 
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+            line-height: 1.5;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .btn-primary:hover { background-color: #1557b0; }
+
+        .template-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .template-option {
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 12px;
+            background: #fff;
+        }
+
+        .template-option.active {
+            border-color: var(--primary-color);
+            background-color: #e8f0fe;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Preview Area */
+        #preview-panel {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* --- PRINTABLE PAGE STYLES --- */
+
+        /* Base Variables (Google Style Default) */
+        :root {
+            --pg-font: 'Roboto', sans-serif;
+            --pg-bg: #ffffff;
+            --pg-text: #3c4043;
+            --pg-accent: #1a73e8;
+            --pg-heading: #202124;
+            --pg-pill-bg: #e8f0fe;
+        }
+
+        /* The Paper Sheet */
+        .page {
+            background: #fff;
+            width: 210mm; /* A4 */
+            min-height: 297mm;
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: relative;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            padding: 40px 50px;
+        }
+
+        /* Common Elements */
+        .accent-bar {
+            height: 8px;
+            background: var(--pg-accent);
+            width: 100%;
+            display: none; /* Hidden by default */
+        }
+
+        header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        h1 {
+            font-family: var(--pg-font);
+            margin: 0 0 5px 0;
+            color: var(--pg-heading);
+            font-size: 32px;
+        }
+
+        .subtitle {
+            font-family: var(--pg-font);
+            color: var(--pg-accent);
+            font-weight: 500;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 13px;
+            color: #666;
+            font-family: var(--pg-font);
+        }
+
+        .meta {
+            margin-bottom: 25px;
+            font-family: var(--pg-font);
+            color: var(--pg-text);
+        }
+
+        .date { color: #666; margin-bottom: 15px; display: block; }
+        
+        .content {
+            font-family: var(--pg-font);
+            font-size: 11pt;
+            line-height: 1.6;
+            color: var(--pg-text);
+        }
+
+        .content p { margin-bottom: 18px; }
+
+        .signature {
+            margin-top: 40px;
+            font-family: var(--pg-font);
+            color: var(--pg-heading);
+        }
+
+        /* --- THEMES --- */
+
+        /* 1. Modern (Google) Theme */
+        .theme-modern .accent-bar { display: block; }
+        .theme-modern header { border-bottom: 1px solid #eee; }
+        .theme-modern h1 { letter-spacing: -0.5px; }
+
+        /* 2. Classic Theme */
+        .theme-classic {
+            --pg-font: 'Crimson Pro', serif;
+            --pg-accent: #2c3e50;
+            --pg-heading: #000;
+        }
+        .theme-classic header { text-align: center; border-bottom: 2px solid #2c3e50; }
+        .theme-classic .contact-info { justify-content: center; }
+        .theme-classic .subtitle { color: #555; font-style: italic; }
+        .theme-classic .accent-bar { display: none; }
+        
+        /* 3. Minimal Theme */
+        .theme-minimal {
+            --pg-font: 'Inter', sans-serif;
+            --pg-accent: #000;
+            --pg-heading: #000;
+        }
+        .theme-minimal header { border: none; padding-bottom: 0; }
+        .theme-minimal h1 { font-weight: 300; font-size: 42px; letter-spacing: -1px; }
+        .theme-minimal .subtitle { color: #666; font-weight: 400; text-transform: uppercase; letter-spacing: 1px; font-size: 12px;}
+        .theme-minimal .accent-bar { display: none; }
+        .theme-minimal .contact-info { gap: 25px; margin-top: 20px; border-top: 1px solid #000; padding-top: 15px; width: 100%;}
+
+
+        /* PRINT MEDIA QUERY */
+        @media print {
+            body { background: none; padding: 0; height: auto; display: block; overflow: visible; }
+            #editor-panel { display: none; }
+            #preview-panel { padding: 0; display: block; overflow: visible; }
+            .page { 
+                box-shadow: none; 
+                width: 100%; 
+                height: auto; 
+                margin: 0; 
+                print-color-adjust: exact; 
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR EDITOR -->
+    <aside id="editor-panel">
+        <div class="editor-header">
+            <h2>📝 Cover Letter Builder</h2>
+        </div>
+        
+        <div class="editor-content">
+            <!-- Template Selection -->
+            <div class="form-group">
+                <label>Choose Template</label>
+                <div class="template-selector">
+                    <div class="template-option active" onclick="setTheme('modern')">Modern</div>
+                    <div class="template-option" onclick="setTheme('classic')">Classic</div>
+                    <div class="template-option" onclick="setTheme('minimal')">Minimal</div>
+                </div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+            <!-- Personal Info -->
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="inp-name" value="Your Name" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>Subtitle (Degree/Role)</label>
+                <input type="text" id="inp-subtitle" value="Your Degree / Current Role" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="inp-email" value="email@example.com" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" id="inp-phone" value="+1 234 567 890" oninput="updatePreview()">
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+            <!-- Recipient Info -->
+            <div class="form-group">
+                <label>Company / Recipient</label>
+                <input type="text" id="inp-recipient" value="Hiring Manager / Company Name" oninput="updatePreview()">
+            </div>
+
+            <!-- Content -->
+            <div class="form-group">
+                <label>Opening Paragraph (Who you are & Why writing)</label>
+                <textarea id="inp-para1" oninput="updatePreview()">I am writing to express my interest in the [Job Title] position at [Company Name]. With my background in [Your Field] and experience in [Key Skill 1] and [Key Skill 2], I am confident in my ability to contribute effectively to your team.</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Body Paragraph (Your Experience/Skills)</label>
+                <textarea id="inp-para2" style="height: 120px;" oninput="updatePreview()">In my previous role at [Previous Company], I successfully [Achievement 1], which resulted in [Impact/Result]. I have also developed expertise in [Skill/Technology], allowing me to [Specific Outcome]. My experience managing [Project/Task] has honed my ability to work collaboratively and solve complex problems under tight deadlines.</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Closing Paragraph (Why them & Call to action)</label>
+                <textarea id="inp-para3" oninput="updatePreview()">I am particularly drawn to [Company Name] because of its reputation for [Company Strength/Value]. I am eager to bring my skills in [Your Skill] to help achieve your goals. Thank you for considering my application. I look forward to the possibility of discussing how I can contribute to your team.</textarea>
+            </div>
+
+            <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+        </div>
+    </aside>
+
+    <!-- PREVIEW AREA -->
+    <main id="preview-panel">
+        <div id="page-container" class="page theme-modern">
+            <div class="accent-bar"></div>
+            
+            <div class="container">
+                <header>
+                    <h1 id="out-name">Your Name</h1>
+                    <div class="subtitle" id="out-subtitle">Your Degree / Current Role</div>
+                    <div class="contact-info">
+                        <span id="out-email">✉ email@example.com</span>
+                        <span id="out-phone">☏ +1 234 567 890</span>
+                    </div>
+                </header>
+
+                <div class="meta">
+                    <div class="date" id="out-date">December 4, 2025</div>
+                    <div>Dear <strong id="out-recipient">Hiring Manager / Company Name</strong>,</div>
+                </div>
+
+                <div class="content">
+                    <p id="out-para1">I am writing to express my interest in the [Job Title] position at [Company Name]...</p>
+                    <p id="out-para2">In my previous role at [Previous Company], I successfully [Achievement 1]...</p>
+                    <p id="out-para3">I am particularly drawn to [Company Name] because of its reputation for...</p>
+                </div>
+
+                <div class="signature">
+                    Best regards,<br><br>
+                    <span id="out-sign">Your Name</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 1. Initial Setup
+        const dateElement = document.getElementById('out-date');
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        dateElement.innerText = new Date().toLocaleDateString('en-GB', options);
+
+        // 2. Update Function
+        function updatePreview() {
+            // Text Fields
+            document.getElementById('out-name').innerText = document.getElementById('inp-name').value;
+            document.getElementById('out-subtitle').innerText = document.getElementById('inp-subtitle').value;
+            
+            // Contact with Icons
+            const email = document.getElementById('inp-email').value;
+            const phone = document.getElementById('inp-phone').value;
+            document.getElementById('out-email').innerHTML = email ? `✉ ${email}` : '';
+            document.getElementById('out-phone').innerHTML = phone ? `☏ ${phone}` : '';
+
+            document.getElementById('out-recipient').innerText = document.getElementById('inp-recipient').value;
+            document.getElementById('out-sign').innerText = document.getElementById('inp-name').value;
+
+            // Paragraphs
+            document.getElementById('out-para1').innerText = document.getElementById('inp-para1').value;
+            document.getElementById('out-para2').innerText = document.getElementById('inp-para2').value;
+            document.getElementById('out-para3').innerText = document.getElementById('inp-para3').value;
+        }
+
+        // 3. Theme Switcher
+        function setTheme(themeName) {
+            const page = document.getElementById('page-container');
+            const buttons = document.querySelectorAll('.template-option');
+            
+            // Find the button associated with this theme
+            // (Assuming button text matches theme name for simplicity, or we pass it)
+            // Actually, let's just find the button that has the onclick with this theme name
+            // Or simpler: iterate and check text content
+            
+            // Remove all theme classes
+            page.classList.remove('theme-modern', 'theme-classic', 'theme-minimal');
+            // Add selected theme
+            page.classList.add(`theme-${themeName}`);
+
+            // Update buttons UI
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.toLowerCase() === themeName) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Save preference
+            saveToLocal();
+        }
+
+        // 4. Local Storage Support
+        function saveToLocal() {
+            const data = {
+                name: document.getElementById('inp-name').value,
+                subtitle: document.getElementById('inp-subtitle').value,
+                email: document.getElementById('inp-email').value,
+                phone: document.getElementById('inp-phone').value,
+                recipient: document.getElementById('inp-recipient').value,
+                para1: document.getElementById('inp-para1').value,
+                para2: document.getElementById('inp-para2').value,
+                para3: document.getElementById('inp-para3').value,
+                theme: document.querySelector('.template-option.active').innerText.toLowerCase()
+            };
+            localStorage.setItem('coverLetterData', JSON.stringify(data));
+        }
+
+        function loadFromLocal() {
+            const saved = localStorage.getItem('coverLetterData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.getElementById('inp-name').value = data.name || '';
+                document.getElementById('inp-subtitle').value = data.subtitle || '';
+                document.getElementById('inp-email').value = data.email || '';
+                document.getElementById('inp-phone').value = data.phone || '';
+                document.getElementById('inp-recipient').value = data.recipient || '';
+                document.getElementById('inp-para1').value = data.para1 || '';
+                document.getElementById('inp-para2').value = data.para2 || '';
+                document.getElementById('inp-para3').value = data.para3 || '';
+                
+                if (data.theme) {
+                    const themeBtn = Array.from(document.querySelectorAll('.template-option')).find(btn => btn.innerText.toLowerCase() === data.theme);
+                    if (themeBtn) themeBtn.click();
+                }
+                updatePreview();
+            }
+        }
+
+        // Add event listeners for auto-save
+        const inputs = document.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                updatePreview();
+                saveToLocal();
+            });
+        });
+
+        // Load on startup
+        loadFromLocal();
+    </script>
+</body>
+</html>
