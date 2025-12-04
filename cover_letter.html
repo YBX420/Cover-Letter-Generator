@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cover Letter - Boxuan Ye</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Google Material Palette */
+            --google-blue: #1a73e8;
+            --google-blue-light: #e8f0fe; /* Subtle background for highlights */
+            --text-dark: #202124;
+            --text-gray: #5f6368;
+            --bg-color: #f5f5f5;
+            --paper-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            justify-content: center;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* The Paper Sheet */
+        .page {
+            background: var(--paper-color);
+            width: 210mm; /* A4 Width */
+            min-height: 297mm;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden; /* For the top accent bar */
+        }
+
+        /* Top Blue Accent Bar */
+        .accent-bar {
+            height: 8px;
+            background: var(--google-blue);
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Layout Container */
+        .container {
+            padding: 40px 30px; /* Internal margins */
+        }
+
+        /* Header Section Styling */
+        header {
+            margin-bottom: 40px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 34px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 10px 0 5px 0;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--google-blue); /* Blue to highlight Uni */
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .contact-info {
+            font-size: 14px;
+            color: var(--text-gray);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .contact-info a {
+            color: var(--text-gray);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .contact-info a:hover {
+            color: var(--google-blue);
+        }
+        
+        /* Simple icons using CSS shapes/entities for clean look */
+        .icon-mail::before { content: "✉"; margin-right: 6px; }
+        .icon-phone::before { content: "☏"; margin-right: 6px; }
+
+        /* Meta Data */
+        .meta {
+            margin-bottom: 30px;
+            color: var(--text-dark);
+            font-size: 15px;
+        }
+        .date { color: var(--text-gray); margin-bottom: 15px; }
+
+        /* Body Content */
+        .content {
+            font-size: 15px;
+            line-height: 1.75;
+            color: #3c4043;
+        }
+
+        .content p {
+            margin-bottom: 22px;
+        }
+
+        /* "Tech Pill" Highlight Style - The key change */
+        .tech-pill {
+            background-color: var(--google-blue-light);
+            color: var(--google-blue);
+            font-family: 'Roboto Mono', monospace; /* Monospace font for tech vibe */
+            font-size: 0.9em;
+            font-weight: 500;
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: inline-block; /* Ensures padding works right */
+            border: 1px solid rgba(26, 115, 232, 0.1);
+        }
+
+        /* Signature */
+        .signature {
+            margin-top: 50px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        /* Print Settings */
+        @media print {
+            body { background: none; padding: 0; }
+            .page { box-shadow: none; width: 100%; height: auto; }
+            .container { padding: 20mm 25mm; } /* Standard margins for print */
+            /* Ensure background colors print */
+            .accent-bar, .tech-pill {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page">
+        <div class="accent-bar"></div>
+
+        <div class="container">
+            <header>
+                <h1>Boxuan Ye</h1>
+                <div class="subtitle">MEng Design Engineering @ Imperial College London</div>
+                <div class="contact-info">
+                    <a href="mailto:yeboxuan@gmail.com" class="icon-mail">yeboxuan@gmail.com</a>
+                    <a href="tel:+447422720280" class="icon-phone">+44 7422720280</a>
+                </div>
+            </header>
+
+            <div class="meta">
+                <div class="date" id="current-date">December 2025</div>
+                <div>
+                    <strong>Dear Ocado Technology Robotics Team,</strong>
+                </div>
+            </div>
+
+            <div class="content">
+                <p>I am writing to express my interest in a 6-month robotics internship at Ocado Technology. I am an MEng Design Engineering student at Imperial College London, and my recent work has focused on robot learning, perception, and teleoperation—areas that align closely with Ocado’s autonomous manipulation and automation systems.</p>
+
+                <p>I recently developed an open-vocabulary 6D perception pipeline (implementing GroundingDINO + SAM-HQ + DINOv3 + FoundationPose), managing the full detection, segmentation, correspondence, and pose-refinement flow myself. I have also worked on imitation learning and VLA pipelines, building an Apple Vision Pro–based teleoperation system to collect demonstrations and deploying Pi0.5-style policies on a humanoid robot. I enjoy end-to-end robotics work—from data collection to system debugging and deployment on real hardware.</p>
+
+                <p>I am particularly drawn to Ocado because it combines advanced manipulation research with large-scale engineering reliability. I would be excited to contribute to your work in perception, manipulation, or robot-learning pipelines.</p>
+
+                <p>I have attached my CV and would be happy to share technical details, videos, or code. Thank you for your time, and I would welcome the chance to chat.</p>
+            </div>
+
+            <div class="signature">
+                Best regards,<br><br>
+                Boxuan Ye
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dateElement = document.getElementById('current-date');
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        dateElement.innerText = new Date().toLocaleDateString('en-GB', options);
+    </script>
+</body>
+</html>
